@@ -1,0 +1,52 @@
+esphome:
+  name: air_sensor_v2
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Air Sensor V2 Fallback Hotspot"
+    password: "I5qsAJiDGOZl"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+i2c:
+  sda: D1
+  scl: D2
+  scan: False
+
+sensor:
+  - platform: sht3xd
+    temperature:
+      id: sht31_temp
+      name: "SHT31 Temperature"
+    humidity:
+      id: sht31_humid
+      name: "SHT31 Humidity"
+    address: 0x44
+    update_interval: 60s
+    
+font:
+  - file: "PTM55FT.ttf"
+    id: fonttft
+    size: 10
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    lambda: |-
+      it.printf(0, 10, id(fonttft), "Teplota je %.1f°C", id(sht31_temp).state);
+      it.printf(0, 20, id(fonttft), "Vlhkost je %.0f%% ", id(sht31_humid).state);
