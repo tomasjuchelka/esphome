@@ -22,14 +22,12 @@ api:
 
 ota:
 
-uart:
-  rx_pin: D2
-  tx_pin: D1
-  baud_rate: 9600
-
 sensor:
-  - platform: mhz19
-    co2:
-      name: "MH-Z19 CO2 Value"
+  - platform: dht
+    model: AM2302
+    pin: D1
+    temperature:
+      name: "DHT22 Temperature"
+    humidity:
+      name: "DHT22 Humidity"
     update_interval: 60s
-    automatic_baseline_calibration: true
