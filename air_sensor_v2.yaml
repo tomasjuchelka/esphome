@@ -27,6 +27,11 @@ i2c:
   scl: D2
   scan: False
 
+uart:
+  rx_pin: D4
+  tx_pin: D3
+  baud_rate: 9600
+
 sensor:
   - platform: sht3xd
     temperature:
@@ -37,7 +42,13 @@ sensor:
       name: "SHT31 Humidity"
     address: 0x44
     update_interval: 60s
-    
+  - platform: mhz19
+    co2:
+      id: mh_z19_co2
+      name: "MH-Z19 CO2"
+    update_interval: 60s
+    automatic_baseline_calibration: true
+
 font:
   - file: "PTM55FT.ttf"
     id: fonttft
@@ -48,5 +59,6 @@ display:
     model: "SSD1306 128x64"
     address: 0x3C
     lambda: |-
-      it.printf(0, 10, id(fonttft), "Teplota je %.1f°C", id(sht31_temp).state);
-      it.printf(0, 20, id(fonttft), "Vlhkost je %.0f%% ", id(sht31_humid).state);
+      it.printf(0, 10, id(fonttft), "Teplota: %.1f°C", id(sht31_temp).state);
+      it.printf(0, 20, id(fonttft), "Vlhkost: %.0f%% ", id(sht31_humid).state);
+      it.printf(0, 30, id(fonttft), "CO2: %.0fppm ", id(mh_z19_co2).state);
